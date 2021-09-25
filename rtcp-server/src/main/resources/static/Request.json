@@ -6,6 +6,7 @@
         "videoStreamingRating": 0,
         "audioStreamingRating": 0,
         "voipRating": 0,
+        "voipVideoRating": 0,
         "messagingRating": 0,
         "surfingRating": 0
       },

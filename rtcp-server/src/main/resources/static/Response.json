@@ -1,0 +1,11 @@
+{
+  "plans": [
+    {
+      "price": "Rs. 901",
+      "period": "28 days",
+      "internetBandwidth": "3gb / day",
+      "callingBandwidth": "Unlimited",
+      "smsBandwidth": "500 SMS"
+    }
+  ]
+}

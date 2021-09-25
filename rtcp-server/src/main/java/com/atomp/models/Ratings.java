@@ -22,6 +22,8 @@ public class Ratings {
     private Long videoStreamingRating;
     @Expose
     private Long voipRating;
+    @Expose
+    private Long voipVideoRating;
 
     public Long getAudioStreamingRating() {
         return audioStreamingRating;
@@ -51,6 +53,10 @@ public class Ratings {
         return voipRating;
     }
 
+    public Long getVoipVideoRating() {
+        return voipVideoRating;
+    }
+
     public static class Builder {
 
         private Long audioStreamingRating;
@@ -60,6 +66,7 @@ public class Ratings {
         private Long surfingRating;
         private Long videoStreamingRating;
         private Long voipRating;
+        private Long voipVideoRating;
 
         public Ratings.Builder withAudioStreamingRating(Long audioStreamingRating) {
             this.audioStreamingRating = audioStreamingRating;
@@ -96,6 +103,11 @@ public class Ratings {
             return this;
         }
 
+        public Ratings.Builder withVoipVideoRating(Long voipVideoRating) {
+            this.voipVideoRating = voipVideoRating;
+            return this;
+        }
+
         public Ratings build() {
             Ratings ratings = new Ratings();
             ratings.audioStreamingRating = audioStreamingRating;
@@ -105,6 +117,7 @@ public class Ratings {
             ratings.surfingRating = surfingRating;
             ratings.videoStreamingRating = videoStreamingRating;
             ratings.voipRating = voipRating;
+            ratings.voipVideoRating = voipVideoRating;
             return ratings;
         }
 

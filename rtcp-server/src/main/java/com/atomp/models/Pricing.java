@@ -9,7 +9,7 @@ import com.google.gson.annotations.Expose;
 public class Pricing {
 
     @Expose
-    private Long bandwidth;
+    private Double bandwidth;
     @Expose
     private Long bandwidthPeriod;
     @Expose
@@ -21,7 +21,7 @@ public class Pricing {
     @Expose
     private SmsPricing smsPricing;
 
-    public Long getBandwidth() {
+    public Double getBandwidth() {
         return bandwidth;
     }
 
@@ -47,14 +47,14 @@ public class Pricing {
 
     public static class Builder {
 
-        private Long bandwidth;
+        private Double bandwidth;
         private Long bandwidthPeriod;
         private Long billingPeriod;
         private CallPricing callPricing;
         private Long rate;
         private SmsPricing smsPricing;
 
-        public Pricing.Builder withBandwidth(Long bandwidth) {
+        public Pricing.Builder withBandwidth(Double bandwidth) {
             this.bandwidth = bandwidth;
             return this;
         }
