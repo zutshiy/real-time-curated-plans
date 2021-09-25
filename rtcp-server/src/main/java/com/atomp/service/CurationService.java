@@ -6,6 +6,7 @@ import com.atomp.models.RealtimeCuratedPlansRequest;
 import com.atomp.models.RealtimeCuratedPlansResponse;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 @Service
@@ -28,7 +29,6 @@ public class CurationService
 		double messagingBandwidth= messagingRating.doubleValue()*Constants.MESSAGING_FACTOR;
 		double surfingBandwidth= surfingRating.doubleValue()*Constants.SURFING_FACTOR;
 
-
 		double totalBandwidth = videoBandwidth+audioBandwidth+voipBandwidth+voipVideoBandwidth+messagingBandwidth+surfingBandwidth;
 		double finalBandwidth = Math.ceil(Math.round(totalBandwidth*100.0)/10.0)/10.0;
 		List<Pricing> allPricing = realtimeCuratedPlansRequest.getPreferences().getInternetPreferences().getPricing();
@@ -38,19 +38,49 @@ public class CurationService
 		if(pricingForBandwidth.isPresent())
 		{
 			RealtimeCuratedPlansResponse.Builder builder = new RealtimeCuratedPlansResponse.Builder();
-			double upperLimit = Math.ceil(finalBandwidth + 0.5);
-			double lowerLimit = Math.floor(finalBandwidth > 0.5 ? finalBandwidth - 0.5 : 0);
-			List<Plan> allPlans =  new ArrayList<>();
+
+
+			double upperLimitBeforeFloor = finalBandwidth + 0.5;
+			double upperLimit=0;
+			if (upperLimitBeforeFloor % 0.5 == 0) {
+				upperLimit = upperLimitBeforeFloor;
+			} else {
+				upperLimit = (upperLimitBeforeFloor - (upperLimitBeforeFloor % 0.5)) + 0.5;
+			}
+			double lowerLimitBeforeFloor = finalBandwidth > 0.5 ? finalBandwidth - 0.5 : 0;
+
+			double lowerLimit = (lowerLimitBeforeFloor - (lowerLimitBeforeFloor % 0.5)) * 10.0 / 10.0;
+
+			List<Plan> allPlans = new ArrayList<>();
+
 			Plan perfectPlan = createPlan(finalBandwidth, pricingForBandwidth.get());
 			allPlans.add(perfectPlan);
-
-			Plan uperLimitPlan = createPlan(upperLimit, pricingForBandwidth.get());
-			allPlans.add(uperLimitPlan);
-			if(lowerLimit!=0) {
+			if (lowerLimit != 0) {
 				Plan lowerLimitPlan = createPlan(lowerLimit, pricingForBandwidth.get());
 				allPlans.add(lowerLimitPlan);
 			}
 
+			Plan uperLimitPlan = createPlan(upperLimit, pricingForBandwidth.get());
+			allPlans.add(uperLimitPlan);
+
+			double monthlyBandwidth = finalBandwidth * 28;
+
+
+			if(monthlyBandwidth<21) {
+				Optional<Pricing> pricingForBandwidthForMonth = allPricing.stream().filter(a->a.getBandwidthPeriod()==28).sorted(Comparator.comparing(Pricing::getBandwidth)).filter(cb -> cb.getBandwidth() > monthlyBandwidth).findFirst();
+				if(pricingForBandwidthForMonth.isPresent()) {
+					Plan monthlyPlan = createPlan(monthlyBandwidth, pricingForBandwidthForMonth.get(), 28);
+					allPlans.add(monthlyPlan);
+				}
+			}
+			double yearlyBandwidth = monthlyBandwidth+(monthlyBandwidth*0.4);
+			if(yearlyBandwidth<31) {
+				Optional<Pricing> pricingForBandwidthForYear = allPricing.stream().filter(a->a.getBandwidthPeriod()==365).sorted(Comparator.comparing(Pricing::getBandwidth)).filter(cb -> cb.getBandwidth() > yearlyBandwidth).findFirst();
+				if(pricingForBandwidthForYear.isPresent()) {
+					Plan yearlyPlan = createPlan(yearlyBandwidth, pricingForBandwidthForYear.get(), 365);
+					allPlans.add(yearlyPlan);
+				}
+			}
 			realtimeCuratedPlansResponse = builder.withPlans(allPlans).build();
 		}
 		return realtimeCuratedPlansResponse;
@@ -60,8 +90,15 @@ public class CurationService
 		Plan.Builder plaBuilder = new Plan.Builder();
 		double unit = (double)pricing.getRate() / pricing.getBandwidth();
 		long finalRate = (long)(finalBandwidth * unit);
-
-		plaBuilder.withInternetBandwidth(finalBandwidth +" GB/Day").withPrice("Rs. " +finalRate);
+		DecimalFormat df = new DecimalFormat("#.#");
+		plaBuilder.withInternetBandwidth(df.format(finalBandwidth) +" GB/Day").withPrice("Rs. " +finalRate);
+		return plaBuilder.build();
+	}
+	private Plan createPlan(double finalBandwidth, Pricing pricing,int period) {
+		Plan.Builder plaBuilder = new Plan.Builder();
+		long finalRate = pricing.getRate();
+		DecimalFormat df = new DecimalFormat("#.#");
+		plaBuilder.withInternetBandwidth(df.format(pricing.getBandwidth()) +" GB").withPrice("Rs. " +finalRate).withPeriod(period +" Days");
 		return plaBuilder.build();
 	}
 }

@@ -4,13 +4,25 @@
     "internetPreferences": {
       "ratings": {
         "videoStreamingRating": 0,
-        "audioStreamingRating": 0,
-        "voipRating": 0,
+        "audioStreamingRating": 1,
+        "voipRating": 1,
         "voipVideoRating": 0,
-        "messagingRating": 0,
-        "surfingRating": 0
+        "messagingRating": 1,
+        "surfingRating":5
       },
       "pricing": [
+        {
+          "bandwidth": 0.25,
+          "rate": 75,
+          "bandwidthPeriod": 1,
+          "billingPeriod": 28
+        },
+        {
+          "bandwidth": 0.5,
+          "rate": 100,
+          "bandwidthPeriod": 1,
+          "billingPeriod": 28
+        },
         {
           "bandwidth": 1,
           "rate": 200,
@@ -32,14 +44,44 @@
         {
           "bandwidth": 7,
           "rate": 500,
+          "bandwidthPeriod": 1,
+          "billingPeriod": 28
+        },
+        {
+          "bandwidth": 10,
+          "rate": 70,
           "bandwidthPeriod": 28,
           "billingPeriod": 28
         },
         {
-          "bandwidth": 12,
+          "bandwidth": 15,
+          "rate": 80,
+          "bandwidthPeriod": 28,
+          "billingPeriod": 28
+        },
+        {
+          "bandwidth": 20,
+          "rate": 90,
+          "bandwidthPeriod": 28,
+          "billingPeriod": 28
+        },
+        {
+          "bandwidth": 20,
           "rate": 1000,
-          "bandwidthPeriod": 350,
-          "billingPeriod": 350
+          "bandwidthPeriod": 365,
+          "billingPeriod": 365
+        },
+        {
+          "bandwidth": 25,
+          "rate": 1300,
+          "bandwidthPeriod": 365,
+          "billingPeriod": 365
+        },
+        {
+          "bandwidth": 30,
+          "rate": 1600,
+          "bandwidthPeriod": 365,
+          "billingPeriod": 365
         }
       ]
     },
