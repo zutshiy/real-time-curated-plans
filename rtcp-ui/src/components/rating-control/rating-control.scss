@@ -3,3 +3,13 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  span {
+    font-family: "Calibri Light", sans-serif;
+    color: #b1b1b1;
+  }
+}

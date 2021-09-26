@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import './App.scss';
 import PreferencesBox from './components/preferences-box/preferences-box';
 import {Button, Transition} from 'semantic-ui-react';
-import {PlanCardProps, RealTimeCuratedPlansRequest, RealTimeCuratedPlansResponse, rtcpRequest} from './types';
+import {PlanCardProps, RealTimeCuratedPlansRequest, RealTimeCuratedPlansResponse} from './types';
+import {rtcpRequest} from './constants';
 import PlanCardGroup from './components/plan-card-group/plan-card-group';
 
 function App()
 {
-    const internetPrefs = ['Video Streaming', 'Audio Streaming', 'VoIP', 'VoIP Video Streaming', 'Messaging', 'Surfing/Reading'];
+    const internetPrefs = ['Video Streaming', 'Audio Streaming', 'VoIP', 'VoIP Video', 'Messaging', 'Surfing/Reading'];
     const smsPrefs = ['Domestic SMS', 'International SMS'];
     const callingPrefs = ['Domestic Calls', 'International Calls'];
 
@@ -29,11 +30,14 @@ function App()
             case "VoIP":
                 newRequest.preferences.internetPreferences.ratings.voipRating = rating;
                 break;
-            case "VoIP Video Streaming":
+            case "VoIP Video":
                 newRequest.preferences.internetPreferences.ratings.voipVideoRating = rating;
                 break;
             case "Messaging":
                 newRequest.preferences.internetPreferences.ratings.messagingRating = rating;
+                break;
+            case "Surfing/Reading":
+                newRequest.preferences.internetPreferences.ratings.surfingRating = rating;
                 break;
             case "Domestic Calls":
                 newRequest.preferences.otherPreferences.ratings.callRatings.domesticRating = rating;
