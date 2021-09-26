@@ -14,7 +14,7 @@ const RatingControl = ({name, onChange}: { name: string, onChange: (name: string
     return (
         <div className="rating-container">
             <span>{name}</span>
-            <Rating maxRating={5} size={"huge"} onRate={handleRate}/>
+            <Rating maxRating={5} size={"huge"} onRate={handleRate} clearable/>
         </div>
     );
 };

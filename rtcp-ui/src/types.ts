@@ -24,6 +24,7 @@ export interface RealTimeCuratedPlansRequest
                 videoStreamingRating: number,
                 audioStreamingRating: number,
                 voipRating: number,
+                voipVideoRating: number,
                 messagingRating: number,
                 surfingRating: number
             },
@@ -55,6 +56,18 @@ export interface RealTimeCuratedPlansRequest
     }
 }
 
+export interface RealTimeCuratedPlansResponse
+{
+    plans: [
+        {
+            price: "Rs. 901",
+            period: "28 days",
+            internetBandwidth: "3gb / day",
+            callingBandwidth: "Unlimited",
+            smsBandwidth: "500 SMS"
+        }
+    ]
+}
 
 export const rtcpRequest = {
     "status": "New",
@@ -64,6 +77,7 @@ export const rtcpRequest = {
                 "videoStreamingRating": 0,
                 "audioStreamingRating": 0,
                 "voipRating": 0,
+                "voipVideoRating": 0,
                 "messagingRating": 0,
                 "surfingRating": 0
             },
@@ -95,53 +109,23 @@ export const rtcpRequest = {
                 {
                     "bandwidth": 12,
                     "rate": 1000,
-                    "bandwidthPeriod": 350,
-                    "billingPeriod": 350
+                    "bandwidthPeriod": 365,
+                    "billingPeriod": 365
                 }
             ]
         },
         "otherPreferences": {
             "ratings": {
-                "callRatings": {
+                "smsRatings": {
                     "domesticRating": 0,
                     "internationalRating": 0
                 },
-                "smsRatings": {
+                "callRatings": {
                     "domesticRating": 0,
                     "internationalRating": 0
                 }
             },
             "pricing": {
-                "callPricing": {
-                    "domesticPricing": [
-                        {
-                            "bandwidth": -1,
-                            "rate": 100,
-                            "bandwidthPeriod": 28,
-                            "billingPeriod": 28
-                        }
-                    ],
-                    "internationalPricing": [
-                        {
-                            "bandwidth": 200,
-                            "rate": 300,
-                            "bandwidthPeriod": 28,
-                            "billingPeriod": 28
-                        },
-                        {
-                            "bandwidth": 300,
-                            "rate": 400,
-                            "bandwidthPeriod": 28,
-                            "billingPeriod": 28
-                        },
-                        {
-                            "bandwidth": 2400,
-                            "rate": 1200,
-                            "bandwidthPeriod": 365,
-                            "billingPeriod": 365
-                        }
-                    ]
-                },
                 "smsPricing": {
                     "domesticPricing": [
                         {
@@ -169,6 +153,36 @@ export const rtcpRequest = {
                             "rate": 300,
                             "bandwidthPeriod": 28,
                             "billingPeriod": 28
+                        }
+                    ]
+                },
+                "callPricing": {
+                    "domesticPricing": [
+                        {
+                            "bandwidth": -1,
+                            "rate": 100,
+                            "bandwidthPeriod": 0,
+                            "billingPeriod": 0
+                        }
+                    ],
+                    "internationalPricing": [
+                        {
+                            "bandwidth": 200,
+                            "rate": 300,
+                            "bandwidthPeriod": 28,
+                            "billingPeriod": 28
+                        },
+                        {
+                            "bandwidth": 300,
+                            "rate": 400,
+                            "bandwidthPeriod": 28,
+                            "billingPeriod": 28
+                        },
+                        {
+                            "bandwidth": 2400,
+                            "rate": 1200,
+                            "bandwidthPeriod": 365,
+                            "billingPeriod": 365
                         }
                     ]
                 }

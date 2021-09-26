@@ -4,24 +4,20 @@ import com.atomp.models.RealtimeCuratedPlansRequest;
 import com.atomp.models.RealtimeCuratedPlansResponse;
 import com.atomp.service.CurationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(value = "http://localhost:3000")
 @RestController
 public class CurationController
 {
-	
 	@Autowired
 	private CurationService curationService;
-	
 
-	@PostMapping("/curate-plan")
-	public RealtimeCuratedPlansResponse getCuratedPlans(@RequestBody RealtimeCuratedPlansRequest realtimeCuratedPlansRequest)
+	@RequestMapping(method = RequestMethod.POST, value = "/curate-plan", consumes = "application/json", produces = "application/json")
+	public ResponseEntity<RealtimeCuratedPlansResponse> getCuratedPlans(@RequestBody RealtimeCuratedPlansRequest realtimeCuratedPlansRequest)
 	{
 		RealtimeCuratedPlansResponse realtimeCuratedPlansResponse = curationService.execute(realtimeCuratedPlansRequest);
-
-		return realtimeCuratedPlansResponse;
+		return ResponseEntity.ok(realtimeCuratedPlansResponse);
 	}
-
 }

@@ -1,49 +1,19 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import './App.scss';
 import PreferencesBox from './components/preferences-box/preferences-box';
 import {Button, Transition} from 'semantic-ui-react';
-import {PlanCardProps, RealTimeCuratedPlansRequest, rtcpRequest} from './types';
+import {PlanCardProps, RealTimeCuratedPlansRequest, RealTimeCuratedPlansResponse, rtcpRequest} from './types';
 import PlanCardGroup from './components/plan-card-group/plan-card-group';
-
-const planCards: PlanCardProps[] = [
-    {
-        planHeader: "Rs.901",
-        planPeriod: "28 Days",
-        internetBandwidth: "3gb / day",
-        callingBandwidth: "Unlimited STD Calls",
-        smsBandwidth: "500 SMS"
-    },
-    {
-        planHeader: "Rs.501",
-        planPeriod: "28 Days",
-        internetBandwidth: "1.5gb / day",
-        callingBandwidth: "Unlimited STD Calls",
-        smsBandwidth: "250 SMS"
-    },
-    {
-        planHeader: "Rs.351",
-        planPeriod: "28 Days",
-        internetBandwidth: "1gb / day",
-        callingBandwidth: "200min / day",
-        smsBandwidth: "300 SMS"
-    },
-    {
-        planHeader: "Rs.151",
-        planPeriod: "28 Days",
-        internetBandwidth: "0.5gb / day",
-        callingBandwidth: "100min / day",
-        smsBandwidth: "100 SMS"
-    }
-]
 
 function App()
 {
-    const internetPrefs = ['Video Streaming', 'Audio Streaming', 'VoIP', 'Messaging', 'Surfing/Reading'];
+    const internetPrefs = ['Video Streaming', 'Audio Streaming', 'VoIP', 'VoIP Video Streaming', 'Messaging', 'Surfing/Reading'];
     const smsPrefs = ['Domestic SMS', 'International SMS'];
     const callingPrefs = ['Domestic Calls', 'International Calls'];
 
     const [request, setRequest] = useState<RealTimeCuratedPlansRequest>(rtcpRequest);
     const [showPlans, setShowPlans] = useState(false);
+    const [planCards, setPlanCards] = useState<PlanCardProps[]>([]);
 
     const updateRequest = (name: string, rating: number) =>
     {
@@ -58,6 +28,9 @@ function App()
                 break;
             case "VoIP":
                 newRequest.preferences.internetPreferences.ratings.voipRating = rating;
+                break;
+            case "VoIP Video Streaming":
+                newRequest.preferences.internetPreferences.ratings.voipVideoRating = rating;
                 break;
             case "Messaging":
                 newRequest.preferences.internetPreferences.ratings.messagingRating = rating;
@@ -81,21 +54,43 @@ function App()
         setRequest(newRequest);
     }
 
-    useEffect(() => console.log(request), [request]);
-
     const transitionDuration = 500;
+
+    function callRestAndUpdateCards()
+    {
+        const requestOptions: RequestInit = {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(request),
+        };
+
+        fetch(" http://localhost:8080/curate-plan", requestOptions)
+            .then(res => res.json())
+            .then((data: RealTimeCuratedPlansResponse) =>
+            {
+                const newPlanCards: PlanCardProps[] = [];
+                data.plans.forEach(plan => newPlanCards.push({
+                    planHeader: plan.price,
+                    planPeriod: plan.period,
+                    internetBandwidth: plan.internetBandwidth,
+                    callingBandwidth: plan.callingBandwidth,
+                    smsBandwidth: plan.smsBandwidth,
+                }))
+                setPlanCards(newPlanCards);
+                setShowPlans(true);
+            })
+            .catch(console.log)
+    }
+
     const togglePlans = () =>
     {
         if (showPlans)
         {
             setShowPlans(false);
-            setTimeout(() => setShowPlans(true), transitionDuration + 100);
         }
-        else
-        {
-            setShowPlans(true);
-        }
+        callRestAndUpdateCards();
     }
+
 
     return (
         <div className="app-container">
