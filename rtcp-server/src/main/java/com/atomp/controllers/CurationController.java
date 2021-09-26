@@ -1,7 +1,7 @@
 package com.atomp.controllers;
 
-import com.atomp.models.RealtimeCuratedPlansRequest;
-import com.atomp.models.RealtimeCuratedPlansResponse;
+import com.atomp.models.request.RealtimeCuratedPlansRequest;
+import com.atomp.models.response.RealtimeCuratedPlansResponse;
 import com.atomp.service.CurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -5,10 +5,10 @@
       "ratings": {
         "videoStreamingRating": 0,
         "audioStreamingRating": 1,
-        "voipRating": 1,
+        "voipRating": 3,
         "voipVideoRating": 0,
-        "messagingRating": 1,
-        "surfingRating":5
+        "messagingRating": 3,
+        "surfingRating":3
       },
       "pricing": [
         {
@@ -67,19 +67,19 @@
         },
         {
           "bandwidth": 20,
-          "rate": 1000,
+          "rate": 400,
           "bandwidthPeriod": 365,
           "billingPeriod": 365
         },
         {
           "bandwidth": 25,
-          "rate": 1300,
+          "rate": 600,
           "bandwidthPeriod": 365,
           "billingPeriod": 365
         },
         {
           "bandwidth": 30,
-          "rate": 1600,
+          "rate": 760,
           "bandwidthPeriod": 365,
           "billingPeriod": 365
         }
@@ -100,9 +100,24 @@
         "smsPricing": {
           "domesticPricing": [
             {
-              "bandwidth": 500,
-              "rate": 100,
+              "bandwidth": -1,
+              "rate": 20,
               "bandwidthPeriod": 28,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 300,
+              "rate": 20,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 500,
+              "rate": 28,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 1000,
+              "rate": 39,
+              "bandwidthPeriod": 1,
               "billingPeriod": 28
             }
           ],
@@ -131,29 +146,49 @@
           "domesticPricing": [
             {
               "bandwidth": -1,
-              "rate": 100,
+              "rate": 50,
               "bandwidthPeriod": 28,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 450,
+              "rate": 250,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 300,
+              "rate": 200,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 100,
+              "rate": 100,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
+              "bandwidth": 50,
+              "rate": 50,
+              "bandwidthPeriod": 1,
               "billingPeriod": 28
             }
           ],
           "internationalPricing": [
             {
-              "bandwidth": 200,
+              "bandwidth": 50,
               "rate": 300,
-              "bandwidthPeriod": 28,
+              "bandwidthPeriod": 1,
               "billingPeriod": 28
             },
             {
-              "bandwidth": 300,
+              "bandwidth": 100,
               "rate": 400,
-              "bandwidthPeriod": 28,
+              "bandwidthPeriod": 1,
               "billingPeriod": 28
             },
             {
-              "bandwidth": 2400,
-              "rate": 1200,
-              "bandwidthPeriod": 365,
-              "billingPeriod": 365
+              "bandwidth": 400,
+              "rate": 750,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
             }
           ]
         }

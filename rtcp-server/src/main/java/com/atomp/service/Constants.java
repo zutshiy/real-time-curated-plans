@@ -7,4 +7,10 @@ public class Constants {
     public static double VOIP_VIDEO_FACTOR = 0.4;
     public static double MESSAGING_FACTOR = 0.04;
     public static double SURFING_FACTOR = 0.04;
+
+    public static double DOMESTIC_CALL_FACTOR = 1;
+    public static double INTERNATIONAL_CALL_FACTOR = 1;
+
+    public static double DOMESTIC_SMS_FACTOR = 1;
+    public static double INTERNATIONAL_SMS_FACTOR = 1;
 }
