@@ -106,17 +106,17 @@
               "billingPeriod": 28
             },{
               "bandwidth": 300,
-              "rate": 20,
+              "rate": 10,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             },{
               "bandwidth": 500,
-              "rate": 28,
+              "rate": 15,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             },{
               "bandwidth": 1000,
-              "rate": 39,
+              "rate": 20,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             }
@@ -146,27 +146,27 @@
           "domesticPricing": [
             {
               "bandwidth": -1,
-              "rate": 50,
+              "rate": 60,
               "bandwidthPeriod": 28,
               "billingPeriod": 28
             },{
               "bandwidth": 450,
-              "rate": 250,
-              "bandwidthPeriod": 1,
-              "billingPeriod": 28
-            },{
-              "bandwidth": 300,
               "rate": 200,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             },{
+              "bandwidth": 300,
+              "rate": 130,
+              "bandwidthPeriod": 1,
+              "billingPeriod": 28
+            },{
               "bandwidth": 100,
-              "rate": 100,
+              "rate": 60,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             },{
               "bandwidth": 50,
-              "rate": 50,
+              "rate": 35,
               "bandwidthPeriod": 1,
               "billingPeriod": 28
             }

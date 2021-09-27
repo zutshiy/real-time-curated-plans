@@ -5,6 +5,7 @@ import com.atomp.models.PlansItem;
 import com.atomp.models.request.RealtimeCuratedPlansRequest;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CuratePlans
@@ -15,7 +16,7 @@ public class CuratePlans
 	public CuratePlans()
 	{
 		buildPlans();
-		allPlans= new ArrayList<>();
+		allPlans= new LinkedList<>();
 	}
 
 	private void buildPlans()

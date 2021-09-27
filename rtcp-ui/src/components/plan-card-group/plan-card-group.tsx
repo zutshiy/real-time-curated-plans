@@ -16,8 +16,10 @@ const PlanCardGroup = ({planCards}: { planCards: PlanCardProps[] }) =>
                             <Card.Description>
                                 <ul>
                                     <li>{planCard.internetBandwidth}</li>
-                                    <li>{planCard.callingBandwidth}</li>
-                                    <li>{planCard.smsBandwidth}</li>
+                                    <li>{planCard.domesticCallingBandwidth}</li>
+                                    {planCard.internationalCallingBandwidth && <li>{planCard.internationalCallingBandwidth}</li>}
+                                    <li>{planCard.domesticSMSBandwidth}</li>
+                                    {planCard.internationalSMSBandwidth && <li>{planCard.internationalSMSBandwidth}</li>}
                                 </ul>
                             </Card.Description>
                         </Card.Content>

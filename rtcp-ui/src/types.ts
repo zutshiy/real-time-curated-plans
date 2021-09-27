@@ -3,8 +3,10 @@ export interface PlanCardProps
     planHeader: string,
     planPeriod: string,
     internetBandwidth: string,
-    callingBandwidth: string,
-    smsBandwidth: string
+    domesticCallingBandwidth: string,
+    internationalCallingBandwidth: string,
+    domesticSMSBandwidth: string
+    internationalSMSBandwidth: string
 }
 
 export interface Pricing
@@ -63,8 +65,10 @@ export interface RealTimeCuratedPlansResponse
             price: string,
             period: string,
             internetBandwidth: string,
-            callingBandwidth: string,
-            smsBandwidth: string
+            domesticCallingBandwidth: string,
+            internationalCallingBandwidth: string,
+            domesticSMSBandwidth: string
+            internationalSMSBandwidth: string
         }
     ]
 }

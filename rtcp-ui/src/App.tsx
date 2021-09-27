@@ -77,8 +77,10 @@ function App()
                     planHeader: plan.price,
                     planPeriod: plan.period,
                     internetBandwidth: plan.internetBandwidth,
-                    callingBandwidth: plan.callingBandwidth,
-                    smsBandwidth: plan.smsBandwidth,
+                    domesticCallingBandwidth: plan.domesticCallingBandwidth,
+                    internationalCallingBandwidth: plan.internationalCallingBandwidth,
+                    domesticSMSBandwidth: plan.domesticSMSBandwidth,
+                    internationalSMSBandwidth: plan.internationalSMSBandwidth,
                 }))
                 setPlanCards(newPlanCards);
                 setShowPlans(true);

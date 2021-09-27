@@ -20,7 +20,7 @@ public class SMSPlanCreator extends PlanCreator
 	@Override
 	public void create(RealtimeCuratedPlansRequest realtimeCuratedPlansRequest, List<PlansItem> allPlans)
 	{
-		super.create(realtimeCuratedPlansRequest,allPlans);
+		super.create(realtimeCuratedPlansRequest, allPlans);
 
 		int domesticRating = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getRatings().getSmsRatings().getDomesticRating();
 		int internationalSMSRating = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getRatings().getSmsRatings().getInternationalRating();
@@ -34,7 +34,7 @@ public class SMSPlanCreator extends PlanCreator
 					.getDomesticPricing();
 
 			domesticPricingForBandwidth = allDomesticPricing.stream().sorted(Comparator.comparing(DomesticPricingItem::getBandwidth))
-					.filter(cb -> cb.getBandwidth() > domesticSMSBandwidth).findFirst();
+					.filter(cb -> cb.getBandwidth() >= domesticSMSBandwidth).findFirst();
 		}
 		Optional<InternationalPricingItem> internationalPricingForBandwidth = Optional.empty();
 		if (internationalSMSRating > 0.0)
@@ -42,25 +42,37 @@ public class SMSPlanCreator extends PlanCreator
 			List<InternationalPricingItem> allInternationalPricing = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getPricing()
 					.getSmsPricing().getInternationalPricing();
 
-			internationalPricingForBandwidth = allInternationalPricing.stream()
-					.sorted(Comparator.comparing(InternationalPricingItem::getBandwidth)).filter(cb -> cb.getBandwidth() > internationalSMSBandwidth).findFirst();
+			internationalPricingForBandwidth = allInternationalPricing.stream().sorted(Comparator.comparing(InternationalPricingItem::getBandwidth))
+					.filter(cb -> cb.getBandwidth() >= internationalSMSBandwidth).findFirst();
 		}
 		for (PlansItem plansItem : allPlans)
 		{
 			if (plansItem.getInternetBandwidth() < 1)
 			{
-				double rate = 0.0;
+				double rate = plansItem.getPrice();
 				if (domesticPricingForBandwidth.isPresent())
 				{
-					rate += plansItem.getPrice() + domesticPricingForBandwidth.get().getRate();
+					rate += (domesticPricingForBandwidth.get().getRate() / domesticPricingForBandwidth.get().getBandwidth()) * domesticSMSBandwidth;
 					plansItem.setDomesticSMSBandwidth(domesticPricingForBandwidth.get().getBandwidth());
 				}
 				if (internationalPricingForBandwidth.isPresent())
 				{
-					rate += plansItem.getPrice() + internationalPricingForBandwidth.get().getRate();
+					rate += (internationalPricingForBandwidth.get().getRate() / internationalPricingForBandwidth.get().getBandwidth())
+							* internationalSMSBandwidth;
 					plansItem.setInternationalSMSBandwidth(internationalPricingForBandwidth.get().getBandwidth());
 				}
 				plansItem.setPrice(rate);
+			}
+			else
+			{
+				plansItem.setDomesticSMSBandwidth(-1);
+
+				if (internationalPricingForBandwidth.isPresent())
+				{
+					double rate = plansItem.getPrice() + internationalPricingForBandwidth.get().getRate();
+					plansItem.setInternationalSMSBandwidth(internationalPricingForBandwidth.get().getBandwidth());
+					plansItem.setPrice(rate);
+				}
 			}
 		}
 	}

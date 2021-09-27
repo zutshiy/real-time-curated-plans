@@ -27,7 +27,7 @@ public class InternetPlanCreator extends PlanCreator
 		List<PricingItem> allPricing = realtimeCuratedPlansRequest.getPreferences().getInternetPreferences().getPricing();
 
 		Optional<PricingItem> pricingForBandwidth = allPricing.stream().sorted(Comparator.comparing(PricingItem::getBandwidth))
-				.filter(cb -> cb.getBandwidth() > finalBandwidth).findFirst();
+				.filter(cb -> cb.getBandwidth() >= finalBandwidth).findFirst();
 		if (pricingForBandwidth.isPresent())
 		{
 			double upperLimitBeforeFloor = finalBandwidth + 0.5;
@@ -44,15 +44,15 @@ public class InternetPlanCreator extends PlanCreator
 
 			double lowerLimit = (lowerLimitBeforeFloor - (lowerLimitBeforeFloor % 0.5)) * 10.0 / 10.0;
 
-			PlansItem perfectPlan = BasePlanHelper.createPlan(finalBandwidth, pricingForBandwidth.get(),"(Most Recommended)");
+			PlansItem perfectPlan = BasePlanHelper.createPlan(finalBandwidth, pricingForBandwidth.get());
 			allPlans.add(perfectPlan);
 			if (lowerLimit != 0)
 			{
-				PlansItem lowerLimitPlan = BasePlanHelper.createPlan(lowerLimit, pricingForBandwidth.get(),"");
+				PlansItem lowerLimitPlan = BasePlanHelper.createPlan(lowerLimit, pricingForBandwidth.get());
 				allPlans.add(lowerLimitPlan);
 			}
 
-			PlansItem uperLimitPlan =  BasePlanHelper.createPlan(upperLimit, pricingForBandwidth.get(),"");
+			PlansItem uperLimitPlan =  BasePlanHelper.createPlan(upperLimit, pricingForBandwidth.get());
 			allPlans.add(uperLimitPlan);
 		}
 	}

@@ -17,7 +17,8 @@ public class CallingPlanCreator extends PlanCreator
 		super(planCreator);
 	}
 
-	@Override public void create(RealtimeCuratedPlansRequest realtimeCuratedPlansRequest, List<PlansItem> allPlans)
+	@Override
+	public void create(RealtimeCuratedPlansRequest realtimeCuratedPlansRequest, List<PlansItem> allPlans)
 	{
 		super.create(realtimeCuratedPlansRequest, allPlans);
 		int domesticRating = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getRatings().getCallRatings().getDomesticRating();
@@ -32,7 +33,7 @@ public class CallingPlanCreator extends PlanCreator
 					.getDomesticPricing();
 
 			domesticPricingForBandwidth = allDomesticPricing.stream().sorted(Comparator.comparing(DomesticPricingItem::getBandwidth))
-					.filter(cb -> cb.getBandwidth() > domesticCallBandwidth).findFirst();
+					.filter(cb -> cb.getBandwidth() >= domesticCallBandwidth).findFirst();
 		}
 
 		Optional<InternationalPricingItem> internationalPricingForBandwidth = Optional.empty();
@@ -41,30 +42,46 @@ public class CallingPlanCreator extends PlanCreator
 			List<InternationalPricingItem> allInternationalPricing = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getPricing()
 					.getCallPricing().getInternationalPricing();
 			internationalPricingForBandwidth = allInternationalPricing.stream().sorted(Comparator.comparing(InternationalPricingItem::getBandwidth))
-					.filter(cb -> cb.getBandwidth() > internationalCallBandwidth).findFirst();
+					.filter(cb -> cb.getBandwidth() >= internationalCallBandwidth).findFirst();
 		}
 
 		for (PlansItem plansItem : allPlans)
 		{
+			double rate = plansItem.getPrice();
 			if (plansItem.getInternetBandwidth() < 1)
 			{
-				double rate = 0.0;
 				if (domesticPricingForBandwidth.isPresent())
 				{
-					rate += plansItem.getPrice() + domesticPricingForBandwidth.get().getRate();
+					rate += (domesticPricingForBandwidth.get().getRate() / domesticPricingForBandwidth.get().getBandwidth()) * domesticCallBandwidth;
 					plansItem.setDomesticCallingBandwidth(domesticPricingForBandwidth.get().getBandwidth());
 				}
 				if (internationalPricingForBandwidth.isPresent())
 				{
-					rate += plansItem.getPrice() + internationalPricingForBandwidth.get().getRate();
+					rate += (internationalPricingForBandwidth.get().getRate() / internationalPricingForBandwidth.get().getBandwidth())
+							* internationalCallBandwidth;
 					plansItem.setInternationalCallingBandwidth(internationalPricingForBandwidth.get().getBandwidth());
 				}
-				plansItem.setPrice(rate);
-
-			}else
+			}
+			else
 			{
 				plansItem.setDomesticCallingBandwidth(-1);
+
+				List<DomesticPricingItem> allDomesticPricing = realtimeCuratedPlansRequest.getPreferences().getOtherPreferences().getPricing().getCallPricing()
+						.getDomesticPricing();
+
+				Optional<DomesticPricingItem> unlimitedPriceOptional = allDomesticPricing.stream().filter(pricing -> pricing.getBandwidth() == -1).findFirst();
+				if (unlimitedPriceOptional.isPresent())
+				{
+					rate += unlimitedPriceOptional.get().getRate();
+				}
+
+				if (internationalPricingForBandwidth.isPresent())
+				{
+					rate += internationalPricingForBandwidth.get().getRate();
+					plansItem.setInternationalCallingBandwidth(internationalPricingForBandwidth.get().getBandwidth());
+				}
 			}
+			plansItem.setPrice(rate);
 		}
 	}
 }
